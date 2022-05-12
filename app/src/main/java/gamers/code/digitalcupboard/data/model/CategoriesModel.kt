@@ -13,6 +13,7 @@ data class CategoriesModel(
 ):Comparable<CategoriesModel> {
     var image: Drawable? = null
     var items: Item? = null
+    var test: Drawable?=null
     override fun toString(): String {
         return "CatagoriesModel(primaryKey=$primaryKey, CategoryName='$CategoryName', max=$max, current=$current, image=$image)"
     }
