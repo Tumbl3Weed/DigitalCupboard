@@ -1,11 +1,11 @@
 package gamers.code.digitalcupboard.data
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import gamers.code.digitalcupboard.R
 import gamers.code.digitalcupboard.data.model.CategoriesModel
 import kotlinx.android.synthetic.main.catagories_layout.view.*
@@ -65,14 +65,14 @@ class ListAdapterCatagoriesRV(private val interaction: Interaction? = null) :
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
-            itemView.txtItemTitle.text = item.CategoryName+" - "+item.owner
+            itemView.txtItemTitle.text = item.CategoryName!! + " - " + item.owner!!
 
             val progressbar = itemView.progressBar
-            progressbar.max = item.max
-            progressbar.progress = item.current
+            progressbar.max = item.max!!
+            progressbar.progress = item.current!!
 
             itemView.imageView?.setImageDrawable(item.image)
-            itemView.txtItemDate.text = item.current.toString()+"/"+item.max.toString()
+            itemView.txtItemDate.text = item.current!!.toString() + "/" + item.max!!.toString()
         }
     }
 

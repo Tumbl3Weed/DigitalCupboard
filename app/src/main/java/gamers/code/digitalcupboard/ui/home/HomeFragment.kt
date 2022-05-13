@@ -1,6 +1,5 @@
 package gamers.code.digitalcupboard.ui.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,10 +42,12 @@ class HomeFragment : Fragment() {
         super.onStart()
         (activity as MainActivity?)!!.navView.isVisible = true
     }
+
     override fun onResume() {
         super.onResume()
         (activity as MainActivity?)!!.navView.isVisible = true
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

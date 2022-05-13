@@ -1,22 +1,21 @@
 package gamers.code.digitalcupboard.data.model
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 data class Item(
 
-    var primaryKey: Int,
-    var name: String,
-    var dateAcquired: LocalDate,
+    var primaryKey: String?,
+    var name: String?,
+    var dateAcquired: Date?,
 
-    var description: String,
+    var description: String?,
 
-    ):Comparable<Item> {
+    ) : Comparable<Item> {
     lateinit var dateEdited: Date
     override fun compareTo(other: Item): Int {
-        if(primaryKey > other.primaryKey) return -1
-        if(primaryKey < other.primaryKey) return +1
+        if (primaryKey!! > other.primaryKey!!) return -1
+        if (primaryKey!! < other.primaryKey!!) return +1
         return 0
     }
 
@@ -36,11 +35,13 @@ data class Item(
     }
 
     override fun hashCode(): Int {
-        var result = primaryKey
+        var result = primaryKey.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + dateAcquired.hashCode()
-        result = 31 * result + dateEdited.hashCode()
         result = 31 * result + description.hashCode()
+        result = 31 * result + dateEdited.hashCode()
         return result
     }
+
+
 }

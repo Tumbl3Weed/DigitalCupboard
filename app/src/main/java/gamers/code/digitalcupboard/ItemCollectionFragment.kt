@@ -1,22 +1,21 @@
 package gamers.code.digitalcupboard
 
 
-import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-
-
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
+import com.google.firebase.ktx.Firebase
 import gamers.code.digitalcupboard.data.ListAdapterItemRV
 import gamers.code.digitalcupboard.data.model.Item
-
 import gamers.code.digitalcupboard.databinding.FragmentItemCollectionBinding
-
-import kotlinx.android.synthetic.main.fragment_item_collection.view.*
+import java.sql.Date
 
 
 private const val ARG_PARAM1 = "param1"
@@ -27,22 +26,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ItemCollectionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ItemCollectionFragment : Fragment() , ListAdapterItemRV.Interaction{
-    // TODO: Rename and change types of parameters
+class ItemCollectionFragment : Fragment(), ListAdapterItemRV.Interaction {
+
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var itemListAdapter : ListAdapterItemRV
+    lateinit var itemListAdapter: ListAdapterItemRV
     private var _binding: FragmentItemCollectionBinding? = null
     private val binding get() = _binding!!
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,45 +42,27 @@ class ItemCollectionFragment : Fragment() , ListAdapterItemRV.Interaction{
 
         _binding = FragmentItemCollectionBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        initRecyclerView()
-
-        return root
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun initRecyclerView(){
-        val recycler_view =  binding.itemCollectionRV
-        recycler_view.apply{
+        val recycler_view = binding.itemCollectionRV
+        recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
             itemListAdapter = ListAdapterItemRV(this@ItemCollectionFragment)
             adapter = itemListAdapter
 
         }
-        val list = mutableListOf(
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-            Item(0,"Favourite Shirt", java.time.LocalDate.now(),"Its the orange one"),
-        )
-        list.sort()
-        itemListAdapter.submitList(list)
+        val db = Firebase.firestore
+        db.collection("category")
+            .get()
+            .addOnSuccessListener { result ->
+                val list = mutableListOf<Item>()
+                for ((i, document) in result.withIndex()) {
+
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "Failed to get database", Toast.LENGTH_LONG).show()
+            }
+        Log.d("OMG", "MADE IT")
+        return root
     }
 
     companion object {

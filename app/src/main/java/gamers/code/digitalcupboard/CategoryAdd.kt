@@ -1,14 +1,18 @@
 package gamers.code.digitalcupboard
 
+import android.app.ProgressDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import gamers.code.digitalcupboard.databinding.FragmentCategoryAddBinding
-import gamers.code.digitalcupboard.databinding.FragmentHomeBinding
-import com.google.firebase.storage.StorageReference as StorageReference1
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +24,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [CategoryAdd.newInstance] factory method to
  * create an instance of this fragment.
  */
+@Suppress("DEPRECATION")
 class CategoryAdd : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -27,12 +32,15 @@ class CategoryAdd : Fragment() {
 
     private var _binding: FragmentCategoryAddBinding? = null
     private val binding get() = _binding!!
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -41,7 +49,7 @@ class CategoryAdd : Fragment() {
     ): View? {
         _binding = FragmentCategoryAddBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
-        binding.btnAddCategory.setOnClickListener{addCategory()}
+        binding.btnAddCategory.setOnClickListener { addCategory() }
 
         return binding.root
     }
@@ -66,14 +74,39 @@ class CategoryAdd : Fragment() {
             }
     }
 
-    private fun addCategory(){
+    private fun addCategory() {
+        val progressDialog = ProgressDialog(activity)
+        progressDialog.setTitle("Adding Category")
+        progressDialog.setMessage("Loading, please wait")
+        progressDialog.show()
+        val db = Firebase.firestore
 
+        val cat = hashMapOf(
+
+            "category" to binding.edtTxtName.text.toString(),
+            "owner" to binding.edtTxtCatOwner.text.toString(),
+            "current" to 0,
+            "max" to binding.edtTxtCatGoal.text.toString(),
+        )
+
+        db.collection("category")
+            .add(cat)
+            .addOnSuccessListener { documentReference ->
+                progressDialog.dismiss()
+                Log.d("CatAdd", "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                progressDialog.dismiss()
+                Toast.makeText(activity, "Error failed to add", Toast.LENGTH_SHORT).show()
+                Log.w("CatAdd", "Error adding document", e)
+            }
     }
 
     override fun onStart() {
         super.onStart()
         (activity as MainActivity?)!!.navView.isVisible = false
     }
+
     override fun onResume() {
         super.onResume()
         (activity as MainActivity?)!!.navView.isVisible = false

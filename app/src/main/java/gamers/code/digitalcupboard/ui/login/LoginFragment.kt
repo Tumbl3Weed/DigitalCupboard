@@ -1,10 +1,5 @@
 package gamers.code.digitalcupboard.ui.login
 
-import android.app.Activity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,20 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
-import androidx.navigation.Navigation.findNavController
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import gamers.code.digitalcupboard.MainActivity
-import gamers.code.digitalcupboard.databinding.FragmentLoginBinding
-
 import gamers.code.digitalcupboard.R
-import gamers.code.digitalcupboard.ui.dashboard.DashboardFragment
+import gamers.code.digitalcupboard.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
 
@@ -41,10 +32,8 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -113,15 +102,7 @@ class LoginFragment : Fragment() {
         }
 
         loginButton.setOnClickListener {
-//            loadingProgressBar.visibility = View.VISIBLE
-//            loginViewModel.login(
-//                usernameEditText.text.toString(),
-//                passwordEditText.text.toString()
-
-
             view.findNavController().navigate(R.id.action_loginFragment_to_navigation_dashboard)
-
-
         }
     }
 
@@ -146,6 +127,7 @@ class LoginFragment : Fragment() {
         super.onStart()
         (activity as MainActivity?)!!.navView.isVisible = false
     }
+
     override fun onResume() {
         super.onResume()
         (activity as MainActivity?)!!.navView.isVisible = false

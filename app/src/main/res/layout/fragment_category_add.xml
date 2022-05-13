@@ -19,12 +19,12 @@
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:text="@string/category_name"
-        app:layout_constraintBottom_toTopOf="@+id/edtTxtCatDescription"
+        app:layout_constraintBottom_toTopOf="@+id/edtTxtCatOwner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/edtTxtCatDescription"
+        android:id="@+id/edtTxtCatOwner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
