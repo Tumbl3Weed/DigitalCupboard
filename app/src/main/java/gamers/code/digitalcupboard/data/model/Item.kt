@@ -1,5 +1,6 @@
 package gamers.code.digitalcupboard.data.model
 
+import com.google.firebase.Timestamp
 import java.time.LocalDate
 import java.util.*
 
@@ -7,7 +8,7 @@ data class Item(
 
     var primaryKey: String?,
     var name: String?,
-    var dateAcquired: Date?,
+    var dateAcquired: Timestamp?,
 
     var description: String?,
 

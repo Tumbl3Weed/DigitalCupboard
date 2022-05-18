@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import gamers.code.digitalcupboard.R
 import gamers.code.digitalcupboard.data.model.Item
+import kotlinx.android.synthetic.main.catagories_layout.view.*
 
 class ListAdapterItemRV(private val interaction: Interaction? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -65,6 +66,8 @@ class ListAdapterItemRV(private val interaction: Interaction? = null) :
                 interaction?.onItemSelected(adapterPosition, item)
             }
 
+            itemView.txtItemTitle.text = item.name!!
+            itemView.txtItemDescription.text = item.description
 
         }
     }

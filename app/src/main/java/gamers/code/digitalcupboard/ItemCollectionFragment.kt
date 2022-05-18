@@ -10,12 +10,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
 import gamers.code.digitalcupboard.data.ListAdapterItemRV
 import gamers.code.digitalcupboard.data.model.Item
 import gamers.code.digitalcupboard.databinding.FragmentItemCollectionBinding
-import java.sql.Date
 
 
 private const val ARG_PARAM1 = "param1"
@@ -42,6 +40,11 @@ class ItemCollectionFragment : Fragment(), ListAdapterItemRV.Interaction {
 
         _binding = FragmentItemCollectionBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        adapter()
+        return root
+    }
+
+    fun adapter(){
         val recycler_view = binding.itemCollectionRV
         recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -50,19 +53,37 @@ class ItemCollectionFragment : Fragment(), ListAdapterItemRV.Interaction {
 
         }
         val db = Firebase.firestore
+        val list = mutableListOf<Item>()
         db.collection("category")
             .get()
             .addOnSuccessListener { result ->
-                val list = mutableListOf<Item>()
-                for ((i, document) in result.withIndex()) {
 
+                for ((x, document1) in result.withIndex()) {
+                    db.collection("category").document(document1.id).collection("item").get()
+                        .addOnSuccessListener { r ->
+
+                            for ((i, d) in r.withIndex()) {
+
+                                Log.d("OMG", "FOUND IT"+d.toString())
+                                list.add(
+                                    i, Item(
+                                        d.id.toString(),
+                                        d.data.get("name") as String?,
+                                        d.data.get("dateAcquired") as com.google.firebase.Timestamp?,
+                                        d.data.get("description") as String?,
+                                    )
+                                )
+                            }
+                        }
                 }
+                list.sort()
+                itemListAdapter.submitList(list)
+                Log.d("OMG", list.toString())
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Failed to get database", Toast.LENGTH_LONG).show()
             }
         Log.d("OMG", "MADE IT")
-        return root
     }
 
     companion object {

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import gamers.code.digitalcupboard.MainActivity
 import gamers.code.digitalcupboard.R
 import gamers.code.digitalcupboard.databinding.FragmentLoginBinding
@@ -22,7 +23,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var loginViewModel: LoginViewModel
     private var _binding: FragmentLoginBinding? = null
-
+    private var auth: FirebaseAuth? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -45,6 +46,8 @@ class LoginFragment : Fragment() {
         val passwordEditText = binding.password
         val loginButton = binding.login
         val loadingProgressBar = binding.loading
+
+        auth = FirebaseAuth.getInstance();
         loginButton.isEnabled = true
         loginViewModel.loginFormState.observe(viewLifecycleOwner,
             Observer { loginFormState ->
@@ -102,8 +105,28 @@ class LoginFragment : Fragment() {
         }
 
         loginButton.setOnClickListener {
-            view.findNavController().navigate(R.id.action_loginFragment_to_navigation_dashboard)
+            LogIn(usernameEditText.text.toString(), passwordEditText.text.toString(),view)
         }
+    }
+
+    fun LogIn(email: String,password:String, view: View){
+        auth!!.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(activity as MainActivity) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+
+
+
+                    val user = auth!!.currentUser
+                    view.findNavController().navigate(R.id.action_loginFragment_to_navigation_dashboard)
+                } else {
+                    // If sign in fails, display a message to the user.
+
+                    Toast.makeText(activity, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+
+                }
+            }
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
